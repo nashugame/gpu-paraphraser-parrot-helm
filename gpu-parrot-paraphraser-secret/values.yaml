@@ -1,0 +1,5 @@
+awsDynamodbAllActions:
+  awsAccessKeyId: ""
+  awsSecretAccessKey: ""
+  credentials: ""
+kubernetesClusterDomain: cluster.local

@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: {{ include "gpu-parrot-paraphraser-service.fullname" . }}-gpu-parrot-paraphraser
+  labels:
+  {{- include "gpu-parrot-paraphraser-service.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.gpuParrotParaphraser.type }}
+  selector:
+    app: gpu-parrot-paraphraser
+  {{- include "gpu-parrot-paraphraser-service.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.gpuParrotParaphraser.ports | toYaml | nindent 2 -}}

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Route
+metadata:
+  name: {{ include "gpu-parrot-paraphraser-route.fullname" . }}-gpu-parrot-paraphraser
+  labels:
+  {{- include "gpu-parrot-paraphraser-route.labels" . | nindent 4 }}
+  annotations:
+    haproxy.router.openshift.io/timeout: 1h
+    openshift.io/host.generated: "true"
+spec:
+  host: gpu-parrot-paraphraser-cft-ito-inno.apps.c1.ocp.dev.sgcip.com
+  path: /
+  port:
+    targetPort: 8080-tcp
+  tls:
+    insecureEdgeTerminationPolicy: None
+    termination: edge
+  to:
+    kind: Service
+    name: gpu-parrot-paraphraser
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: "2022-07-05T13:58:53Z"
+      status: "True"
+      type: Admitted
+    host: gpu-parrot-paraphraser-cft-ito-inno.apps.c1.ocp.dev.sgcip.com
+    routerCanonicalHostname: router-default.apps.c1.ocp.dev.sgcip.com
+    routerName: default
+    wildcardPolicy: None

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gpu-parrot-paraphraser-dc.fullname" . }}-gpu-parrot-paraphraser
+  labels:
+    app.kubernetes.io/instance: gpu-parrot-paraphraser
+    app.kubernetes.io/component: gpu-parrot-paraphraser
+    app.kubernetes.io/part-of: gpu-parrot-paraphraser
+    app.kubernetes.io/name: rocketchat
+    app.kubernetes.io/version: 3.13.2
+  {{- include "gpu-parrot-paraphraser-dc.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: gpu-parrot-paraphraser
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gpu-parrot-paraphraser
+    spec:
+      containers:
+      - args:
+        - main:app
+        - --host
+        - 0.0.0.0
+        - --port
+        - "8080"
+        command:
+        - uvicorn
+        envFrom:
+        - secretRef:
+            name: aws-dynamodb-all-actions
+        image: docker.io/ciprnd/s2i-python:3.9
+        imagePullPolicy: Always
+        name: gpu-parrot-paraphraser
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            nvidia.com/gpu: "0"
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 40
+      tolerations:
+      - effect: NoSchedule
+        key: dw-cft-ito-inno-gpu-sp
+        operator: Exists

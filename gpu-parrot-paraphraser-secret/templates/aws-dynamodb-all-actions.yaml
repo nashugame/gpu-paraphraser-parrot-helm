@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Secret
+metadata:
+  name: {{ include "gpu-parrot-paraphraser-secret.fullname" . }}-aws-dynamodb-all-actions
+  labels:
+  {{- include "gpu-parrot-paraphraser-secret.labels" . | nindent 4 }}
+  annotations:
+    cloudcredential.openshift.io/aws-policy-last-applied: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["dynamodb:*"],"Resource":"arn:aws:dynamodb:eu-west-1:710552119979:table/tenant-cft-ito-inno-*"},{"Effect":"Allow","Action":["iam:GetUser"],"Resource":"arn:aws:iam::710552119979:user/c1-fn79c-cft-ito-inno-dynamodb-all-actions-dxlp2"}]}'
+    cloudcredential.openshift.io/credentials-request: openshift-cloud-credential-operator/cft-ito-inno-dynamodb-all-actions
+data:
+  aws_access_key_id: {{ required "awsDynamodbAllActions.awsAccessKeyId is required"
+    .Values.awsDynamodbAllActions.awsAccessKeyId | b64enc | quote }}
+  aws_secret_access_key: {{ required "awsDynamodbAllActions.awsSecretAccessKey is required" .Values.awsDynamodbAllActions.awsSecretAccessKey | b64enc | quote }}
+  credentials: {{ required "awsDynamodbAllActions.credentials is required" .Values.awsDynamodbAllActions.credentials
+    | b64enc | quote }}
+type: Opaque
