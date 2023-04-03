@@ -31,7 +31,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-        - args:
+          args:
           - main:app
           - --host
           - 0.0.0.0
@@ -43,17 +43,17 @@ spec:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
               secretKeyRef:
-                name: aws_access_key_id 
-                key: {{.Values.awsDynamodbAllActions.awsAccessKeyId}}
+                name: {{ include "gpu-parrot-paraphraser.fullname" . }}
+                key: aws-access-key-id 
 
           - name: AWS_SECRET_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: aws_secret_access_key
-                key: {{.Values.awsDynamodbAllActions.awsSecretAccessKey}}
+                name: {{ include "gpu-parrot-paraphraser.fullname" . }}
+                key: aws-secret-access-key
           
 
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

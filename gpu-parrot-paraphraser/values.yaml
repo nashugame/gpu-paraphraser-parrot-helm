@@ -4,14 +4,16 @@
 
 #secrets
 awsDynamodbAllActions:
+  awsAccessKeyId: ${AWSACCESSKEYID}
+  awsSecretAccessKey: ${AWSSECRETACCESSKEY}
 replicaCount: 1
 
 
 image:
-  repository: docker.io/ciprnd/s2i-python
+  repository: docker.io/ciprnd/gpu-parrot-paraphraser
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "3.9"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,7 +26,6 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
 
 podAnnotations: {}
 
